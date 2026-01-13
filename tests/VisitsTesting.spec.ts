@@ -8,6 +8,12 @@ const username = page.locator('#username')
 const password = page.locator('#password')
 const LoginBtn = page.locator('#loginFormSubmitButton')
 //const allBtn = page.locator('div.btn-group.summary-status label', { hasText: 'All' });
+const notevisible = expect(await page.getByRole('heading', { name: /General SOAP Note/ }).isVisible);
+const note = await page.getByRole('heading', { name: /General SOAP Note/ });
+
+const input = page.locator('#txtMedicineName-autoComplete');
+
+
 
     await page.goto("http://localhost:8083/app/index/index.html#/login");
     await expect(username).toBeEnabled();
@@ -18,22 +24,53 @@ const LoginBtn = page.locator('#loginFormSubmitButton')
     await LoginBtn.click();
 
     await page.waitForTimeout(5000);
-    //await allBtn.scrollIntoViewIfNeeded();
-    //await allBtn.click();
-    //await page.locator('small#all').locator('..').click({ force: true }); 
     await page.locator('label:has(#rdoFilterPatientAll)').click();
     await page.waitForTimeout(3000);
     await page.locator('[id="afullname0"]').click();
-    await expect(page.getByRole('button',{ name: 'Add Note'})).toBeEnabled();
+    await page.waitForTimeout(5000);
+
+    if (await note.count() > 0) {
+     await note.click();  
+}   else {
+    await expect(page.getByRole('button',{ name: 'Add Note'})).toBeVisible();
     await page.getByRole('button', { name: 'Add Note' }).click();
-    //await page.locator('[id="selectAppt-0"]').click();
     await page.locator('#selectAppt-0').click();
-    await expect(page.getByRole('textbox', {name: 'Type note group or note description to search',})).toBeVisible();
     await page.getByRole('textbox', {name: 'Type note group or note description to search',}).fill('General SOAP');
+    await page.locator('text=Default').locator('..').locator('text=General Soap Note').click();
+    await page.locator('#save').click(); 
 
-    
+}
 
-    
-    //await page.getByRole('button', { name: 'Add Note' }).click();
+    //await page.locator('label:has(Write a Chief Complaint ...)').fill('sample');
 
-    });
+    if (await page.locator('[id="lblYESNO"]').count() > 0 ) {
+            await page.locator('label:has(Write a Chief Complaint ...)').fill('sample');
+    } else{
+        await page.waitForTimeout(5000);
+        await page.locator('[id="btnYes"]').click({force: true});
+        
+        
+    }
+
+    await page.getByRole('textbox', {name: 'Write a Chief Complaint ...'}).fill('Sample chief complaint');
+    await page.getByRole('textbox', {name: 'Write a History of Present Illness ...'}).fill('sample history');
+
+    //Drug History
+    await page.locator('#addMedicalHistory').click();
+    await page.waitForTimeout(5000);
+    await page.locator('#txtMedicineName-autoComplete').click();
+    await page.locator('#txtMedicineName-autoComplete').fill('');
+    await page.locator('#txtMedicineName-autoComplete').click();
+    await page.locator('#txtMedicineName-autoComplete').type('100', {delay: 50});
+    await page.locator('div.ac-container ul.ac-menu li.ac-menu-item a.fastclickable').filter({ hasText: '100 1' }).click();
+    await page.getByRole('button', {name: 'Save'}).click();
+
+    //Surgical History
+    await page.locator('#addSurgicalHistory').click();
+    await page.locator('#txtProcedureSuggest-autoComplete').click();
+    await page.locator('#txtProcedureSuggest-autoComplete').fill('');
+    await page.locator('#txtProcedureSuggest-autoComplete').type('delay', {delay: 50});
+    await page.locator('div.ac-container ul.ac-menu li.ac-menu-item a.fastclickable').filter({hasText: 'DELAYED CRANIAL'}).click();
+    await page.locator('#btn').filter({hasText: 'Save'}).click();
+    await page.locator('#save').filter({hasText: 'Save'}).click();
+})
