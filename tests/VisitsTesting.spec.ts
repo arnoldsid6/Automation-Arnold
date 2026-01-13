@@ -73,4 +73,5 @@ const input = page.locator('#txtMedicineName-autoComplete');
     await page.locator('div.ac-container ul.ac-menu li.ac-menu-item a.fastclickable').filter({hasText: 'DELAYED CRANIAL'}).click();
     await page.locator('#btn').filter({hasText: 'Save'}).click();
     await page.locator('#save').filter({hasText: 'Save'}).click();
+    
 })
