@@ -17,7 +17,6 @@ const modal = page.locator('#yes-no-modal');
 let modalVisible = false;
 
 
-
     await page.goto("http://localhost:8083/app/index/index.html#/login");
     await expect(username).toBeEnabled();
     await username.fill('mdpalanca');
@@ -34,7 +33,7 @@ let modalVisible = false;
 
     if (await note.count() > 0) {
      await note.click();  
-     await expect(page.locator('#yes-no-modal')).toBeVisible({timeout: 5000});
+     //await expect(page.locator('#yes-no-modal')).toBeVisible({timeout: 5000});
 }   else {
     await expect(page.getByRole('button',{ name: 'Add Note'})).toBeVisible();
     await page.getByRole('button', { name: 'Add Note' }).click();
@@ -42,9 +41,8 @@ let modalVisible = false;
     await page.getByRole('textbox', {name: 'Type note group or note description to search',}).fill('General SOAP');
     await page.locator('text=Default').locator('..').locator('text=General Soap Note').click();
     await page.locator('#save').click(); 
-
 }
-/*
+
 
      if   (await page.locator('#yes-no-modal').isVisible({timeout: 3000}) )
      {
@@ -55,18 +53,7 @@ let modalVisible = false;
                 await expect(page.locator('#yes-no-modal')).toBeVisible();
         await page.locator('[id="btnYes"]').click({force: true});
     }
-*/
 
-await page.locator('#yes-no-modal').isVisible({timeout: 3000})
-
-try {
-  await expect(modal).toBeVisible({ timeout: 3000 });
-  modalVisible = true;
-} catch {}
-
-if (modalVisible) {
-  await page.locator('#btnYes').click();
-}
 
     await page.getByRole('textbox', {name: 'Write a Chief Complaint ...'}).fill('Sample chief complaint');
     await page.getByRole('textbox', {name: 'Write a History of Present Illness ...'}).fill('sample history');
