@@ -13,6 +13,9 @@ const note = await page.getByRole('heading', { name: /General SOAP Note/ });
 
 const input = page.locator('#txtMedicineName-autoComplete');
 
+const modal = page.locator('#yes-no-modal');
+let modalVisible = false;
+
 
 
     await page.goto("http://localhost:8083/app/index/index.html#/login");
@@ -31,6 +34,7 @@ const input = page.locator('#txtMedicineName-autoComplete');
 
     if (await note.count() > 0) {
      await note.click();  
+     await expect(page.locator('#yes-no-modal')).toBeVisible({timeout: 5000});
 }   else {
     await expect(page.getByRole('button',{ name: 'Add Note'})).toBeVisible();
     await page.getByRole('button', { name: 'Add Note' }).click();
@@ -40,17 +44,29 @@ const input = page.locator('#txtMedicineName-autoComplete');
     await page.locator('#save').click(); 
 
 }
+/*
 
-    //await page.locator('label:has(Write a Chief Complaint ...)').fill('sample');
-
-    if (await page.locator('[id="lblYESNO"]').count() > 0 ) {
-            await page.locator('label:has(Write a Chief Complaint ...)').fill('sample');
-    } else{
+     if   (await page.locator('#yes-no-modal').isVisible({timeout: 3000}) )
+     {
         await page.waitForTimeout(5000);
+        await expect(page.locator('#lblYESNO')).toHaveText(" Confirm ");
+        await page.waitForTimeout(5000);
+    } else{
+                await expect(page.locator('#yes-no-modal')).toBeVisible();
         await page.locator('[id="btnYes"]').click({force: true});
-        
-        
     }
+*/
+
+await page.locator('#yes-no-modal').isVisible({timeout: 3000})
+
+try {
+  await expect(modal).toBeVisible({ timeout: 3000 });
+  modalVisible = true;
+} catch {}
+
+if (modalVisible) {
+  await page.locator('#btnYes').click();
+}
 
     await page.getByRole('textbox', {name: 'Write a Chief Complaint ...'}).fill('Sample chief complaint');
     await page.getByRole('textbox', {name: 'Write a History of Present Illness ...'}).fill('sample history');
