@@ -1,7 +1,10 @@
 import { expect, Locator, Page } from '@playwright/test';
 
     export class OrderingMain{
+        readonly Viewcart: Locator;
         readonly AddToCart: Locator;
+        readonly ContinueShopping: Locator;
+        readonly AddToCartOutside: Locator;
         readonly Cart: Locator;
         readonly CheckOut: Locator;
         readonly CardNumber: Locator
@@ -19,7 +22,10 @@ import { expect, Locator, Page } from '@playwright/test';
 
 
         constructor (Order: Page){
+this.Viewcart = Order.getByRole('button', { name: 'View' }).nth(2);         
 this.AddToCart = Order.getByRole('button', { name: 'Add to Cart' }).first();
+this.ContinueShopping = Order.locator('.continue', { hasText: 'Continue Shopping' });
+this.AddToCartOutside = Order.getByRole('button', { name: 'Add to Cart' }).nth(1);
 this.Cart = Order.locator('.btn.btn-custom', { hasText: 'Cart' });
 this.CheckOut = Order.getByRole('button', { name: 'Checkout'});
 this.CardNumber = Order.getByRole('textbox').first();
@@ -36,18 +42,41 @@ this.GoBackShop = Order.locator('.btn.btn-primary.col-md-2.offset-md-4', { hasTe
 this.Logout = Order.locator('.btn.btn-custom', { hasText: 'Sign Out' });
 
         }
+        async viewcart() {
+            await expect(this.Viewcart).toBeEnabled({timeout: 1000});
+            await this.Viewcart.click();
+            
+        }
+        /*
         async addtocart() {
             await this.AddToCart.click();
-           
+    }
+           */
+        
+        async addtocart() {
+            await this.AddToCart.click();
+            
         }
+        async continueshopping() {
+            await this.ContinueShopping.click();
+            
+        }
+        async cartoutside() {
+            await this.AddToCartOutside.click();
+            
+        }
+        
         async cart() {
             await this.Cart.click();
+            
         }
         async chckout() {
             await this.CheckOut.click();
+            
         }       
         async cardnumber() {
             await this.CardNumber.fill('3542 2131 9292 4493');
+            
         }
         async month() {
             await this.Month.selectOption('04');
@@ -81,7 +110,9 @@ this.Logout = Order.locator('.btn.btn-custom', { hasText: 'Sign Out' });
             await this.GoBackShop.click();
         }
         async signout() {
+            await expect(this.CardNumber).toBeEnabled();
             await this.Logout.click();
+            console.log('successfully logged out')
         }
 
 

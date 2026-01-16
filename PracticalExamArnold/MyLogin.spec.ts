@@ -31,8 +31,15 @@ await new WelcomeLogin(page).UserPassword();
 await new WelcomeLogin(page).LoginBtn();
 
 //Order
-await page.waitForTimeout(2000);
+await page.waitForTimeout(1000);
+await new OrderingMain(page).viewcart();
+await page.waitForTimeout(1000);
 await new OrderingMain(page).addtocart();
+await page.waitForTimeout(1000);
+await new OrderingMain(page).continueshopping();
+await page.waitForTimeout(1000);
+await new OrderingMain(page).cartoutside();
+await page.waitForTimeout(1000);
 await new OrderingMain(page).cart();
 await page.waitForTimeout(2000);
 await new OrderingMain(page).chckout();

@@ -1,4 +1,4 @@
-import { Locator, Page } from '@playwright/test';
+import { expect, Locator, Page } from '@playwright/test';
 
     export class WelcomeLogin{
         readonly WelcomePage: Page; 
@@ -14,12 +14,15 @@ this.WelLoginBtn = WelcomePage.locator('.btn.btn-block.login-btn');
         }
 
         async UserName() {
+            await expect(this.WelUsername).toBeVisible();
             await this.WelUsername.fill('polyyy14@mailinator.com');
         }
         async UserPassword() {
+             await expect(this.WelPassword).toBeVisible();
             await this.WelPassword.fill('abcdE123');
         }
         async LoginBtn() {
+            await expect(this.WelLoginBtn).toBeEnabled();
             await this.WelLoginBtn.click();
         }
 
