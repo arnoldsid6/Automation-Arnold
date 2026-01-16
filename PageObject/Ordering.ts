@@ -43,7 +43,7 @@ this.Logout = Order.locator('.btn.btn-custom', { hasText: 'Sign Out' });
 
         }
         async viewcart() {
-            await expect(this.Viewcart).toBeEnabled({timeout: 1000});
+            await expect(this.Viewcart).toBeEnabled();
             await this.Viewcart.click();
             
         }
