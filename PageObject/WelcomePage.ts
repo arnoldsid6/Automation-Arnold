@@ -6,11 +6,11 @@ import { expect, Locator, Page } from '@playwright/test';
         readonly WelPassword: Locator;
         readonly WelLoginBtn: Locator;
 
-        constructor (WelcomePage: Page){
-this.WelcomePage = WelcomePage;
-this.WelUsername = WelcomePage.locator('#userEmail');
-this.WelPassword = WelcomePage.locator('#userPassword');
-this.WelLoginBtn = WelcomePage.locator('.btn.btn-block.login-btn');
+        constructor (page: Page){
+this.WelcomePage = page;
+this.WelUsername = page.locator('#userEmail');
+this.WelPassword = page.locator('#userPassword');
+this.WelLoginBtn = page.locator('.btn.btn-block.login-btn');
         }
 
         async UserName() {

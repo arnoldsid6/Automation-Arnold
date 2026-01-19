@@ -1,5 +1,26 @@
 import { expect, Locator, Page } from '@playwright/test';
 
+ export class OrderingMain{
+       
+        readonly Cart: Locator;
+
+        constructor (Order: Page){
+            this.Cart = Order.locator('.btn.btn-custom', { hasText: 'Cart' });
+        
+
+ }
+
+  async cart() {
+            await this.Cart.click();
+            
+        }
+    }
+
+
+
+    
+/*
+
     export class OrderingMain{
         readonly Viewcart: Locator;
         readonly AddToCart: Locator;
@@ -47,11 +68,7 @@ this.Logout = Order.locator('.btn.btn-custom', { hasText: 'Sign Out' });
             await this.Viewcart.click();
             
         }
-        /*
-        async addtocart() {
-            await this.AddToCart.click();
-    }
-           */
+
         
         async addtocart() {
             await this.AddToCart.click();
@@ -119,5 +136,5 @@ this.Logout = Order.locator('.btn.btn-custom', { hasText: 'Sign Out' });
 
     }
 
-
+*/
     

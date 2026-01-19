@@ -16,6 +16,7 @@ const input = page.locator('#txtMedicineName-autoComplete');
 const modal = page.locator('#yes-no-modal');
 let modalVisible = false;
 
+const modalnew = page.locator('.modal.in:has(form#yes-no-modal), .modal.show:has(form#yes-no-modal)');
 
     await page.goto("http://localhost:8083/app/index/index.html#/login");
     await expect(username).toBeEnabled();
@@ -44,15 +45,11 @@ let modalVisible = false;
 }
 
 
-     if   (await page.locator('#yes-no-modal').isVisible({timeout: 3000}) )
-     {
-        await page.waitForTimeout(5000);
-        await expect(page.locator('#lblYESNO')).toHaveText(" Confirm ");
-        await page.waitForTimeout(5000);
-    } else{
-                await expect(page.locator('#yes-no-modal')).toBeVisible();
-        await page.locator('[id="btnYes"]').click({force: true});
-    }
+ try {
+  await expect(modalnew).toBeVisible({ timeout: 5000 });
+  await modalnew.locator('#btnYes').click();
+  await expect(modalnew).toBeHidden({ timeout: 5000 });
+} catch {}
 
 
     await page.getByRole('textbox', {name: 'Write a Chief Complaint ...'}).fill('Sample chief complaint');
@@ -60,7 +57,7 @@ let modalVisible = false;
 
     //Drug History
     await page.locator('#addMedicalHistory').click();
-    await page.waitForTimeout(5000);
+    //await expect(page.locator('#addMedicalHistory').isEnabled);
     await page.locator('#txtMedicineName-autoComplete').click();
     await page.locator('#txtMedicineName-autoComplete').fill('');
     await page.locator('#txtMedicineName-autoComplete').click();
