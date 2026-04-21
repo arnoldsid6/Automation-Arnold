@@ -42,6 +42,8 @@ await kioskPage.getByRole('button', {name: 'No, Skip This'}).click();
     await page.getByRole('button', {name: 'No, Skip This'}).click();
     
 }
+ 
+await page.pause();
 
 /*await page.getByRole('button', {name: 'Queue Me Up'}).click();
 await page.getByRole('button', {name: 'No, Skip This'}).click();

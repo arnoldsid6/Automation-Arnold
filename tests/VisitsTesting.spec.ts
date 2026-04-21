@@ -1,5 +1,5 @@
 import { test, expect} from "@playwright/test";
-import { timeStamp } from "node:console";
+
 
 test('Visit Test', async ({ page }) => 
     
@@ -18,7 +18,7 @@ let modalVisible = false;
 
 const modalnew = page.locator('.modal.in:has(form#yes-no-modal), .modal.show:has(form#yes-no-modal)');
 
-    await page.goto("http://localhost:8083/app/index/index.html#/login");
+    await page.goto("http://localhost:8083//app/index/index.html#/login");
     await expect(username).toBeEnabled();
     await username.fill('mdpalanca');
     await expect(password).toBeEnabled();

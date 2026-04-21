@@ -8,7 +8,7 @@ const password = page.locator('#password')
 const LoginBtn = page.locator('#loginFormSubmitButton')
 const Dropdown = page.locator('#lnkApps')
 
-    await page.goto("http://localhost:8083/app/index/index.html#/login");
+    await page.goto("http://qa-v9ehr-arnold:8083//app/index/index.html#/login");
     await expect(page).toHaveTitle(/One Login/);
     await expect(username).toBeEnabled();
     await username.fill('mdpalanca');
