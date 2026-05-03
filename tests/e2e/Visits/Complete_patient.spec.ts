@@ -19,4 +19,6 @@ import { PageObjectManager } from '../../../PageManager/PageObjectManager';
         await visits.changePatientStatus();
     });
 
+    await page.pause();
+
 }); });

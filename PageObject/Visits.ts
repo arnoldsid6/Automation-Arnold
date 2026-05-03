@@ -18,6 +18,17 @@ readonly visitDateFilter: Locator;
    readonly ellipsisDeleteBtn: Locator;
    readonly deleteNoteReason: Locator;
    readonly deletenoteValdiationMsg: Locator;
+   // IP Case Sheet
+   readonly patientRow: Locator;
+   readonly patientEllipsisBtn: Locator;
+   readonly addFormsOption: Locator;
+   readonly ipCaseSheetOption: Locator;
+
+   // Transfer to Another Doctor
+   readonly transferOption: Locator;
+   readonly doctorSearchInput: Locator;
+   readonly transferToastMessage: Locator;
+
    //Update Status
    readonly patientStatusBtn: Locator;
    readonly completedStatusBtn: Locator;
@@ -56,6 +67,17 @@ readonly visitDateFilter: Locator;
     this.ellipsisDeleteBtn = page.locator('#note-delete-0');
     this.deleteNoteReason = page.getByRole('textbox', {name:'Write your reason...',});
     this.deletenoteValdiationMsg = page.locator('#toast-container .toast');
+
+    // IP Case Sheet
+    this.patientRow = page.locator('tr.patient-row, .visit-row, tbody tr').first();
+    this.patientEllipsisBtn = page.locator('.btn.action-mobile.fastclickable').first();
+    this.addFormsOption = page.getByText('ADD FORMS', { exact: true });
+    this.ipCaseSheetOption = page.getByText('IP Case Sheet');
+
+    // Transfer to Another Doctor
+    this.transferOption = page.getByText('Transfer to another doctor', { exact: true });
+    this.doctorSearchInput = page.locator('[id="Search Doctor-searchDoctor"]');
+    this.transferToastMessage = page.locator('#toast-container .toast-message');
 
     //From Inprogress to Completed status
     this.patientStatusBtn = page.locator('a.btn.btn-sm.btn-default.dropdown-toggle').first();
@@ -104,6 +126,54 @@ readonly visitDateFilter: Locator;
      await this.beginConfirmBtn.click();
      await expect(this.deletenoteValdiationMsg).toBeVisible();
 
+   }
+
+   async transferToAnotherDoctor() {
+     // Read assigned doctor from the first patient row before opening modal
+     const firstRowText = await this.page.locator('tbody tr').first().innerText();
+     const doctorMatch = firstRowText.match(/☒\s+([^\n|]+)/);
+     const currentDoctor = doctorMatch ? doctorMatch[1].trim() : '';
+     const searchTerm = currentDoctor.toLowerCase().includes('mark palan') ? 'valazar' : 'mark';
+
+     // Open action modal via ellipsis
+     await this.page.locator('.btn.action-mobile.fastclickable').first().dispatchEvent('click');
+     await this.page.waitForTimeout(1500);
+
+     // Click Transfer to Another Doctor
+     await this.transferOption.dispatchEvent('click');
+     await this.page.waitForTimeout(2000);
+
+     // Search for the alternate doctor
+     await this.doctorSearchInput.fill(searchTerm);
+     await this.page.waitForTimeout(2000);
+
+     // Click the matching doctor row in the transfer modal results table
+     await this.page.locator('[ng-repeat="doc in vm.doctorsCopy"]')
+       .filter({ hasText: new RegExp(searchTerm, 'i') })
+       .click();
+
+     // Validate toast message
+     await expect(this.transferToastMessage).toBeVisible({ timeout: 8000 });
+   }
+
+   async openIPCaseSheet() {
+     // Set date filter to Beginning of Time
+     await this.visitDateFilter.selectOption({ label: 'Beginning of Time' });
+     await expect(this.confirmModal).toBeVisible();
+     await this.beginConfirmBtn.click();
+
+     // Set status filter to All
+     await this.filterToAll.click();
+     await this.page.waitForTimeout(1500);
+
+     // Open action modal via ellipsis button
+     await this.page.locator('.btn.action-mobile.fastclickable').first().dispatchEvent('click');
+     await this.page.waitForTimeout(1500);
+
+     // Navigate to Add Forms > IP Case Sheet
+     await this.addFormsOption.click();
+     await this.page.waitForTimeout(1500);
+     await this.ipCaseSheetOption.click();
    }
 
    async changePatientStatus() {
