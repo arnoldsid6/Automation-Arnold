@@ -46,5 +46,6 @@ test.describe("Account Management - Create New Users", () => {
     await loginPage.confirmPassword.fill(TEST_CREDENTIALS.password);
     await loginPage.signUpBtn.click();
     await expect(page).toHaveURL(loginPage.HomePageURL);
+    await page.pause();
 });
 });

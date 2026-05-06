@@ -26,5 +26,5 @@ const Dropdown = page.locator('#lnkApps')
     await page.getByRole('row').nth(1).getByRole('link').click();
     await page.locator('[id="assignDoc-1"]').first().click();
     await page.locator('[id="btnAcceptPatient"]').click();
-    
+    await page.pause();
 });

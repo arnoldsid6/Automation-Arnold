@@ -22,4 +22,5 @@ test("Transfer Patient to Another Doctor", async ({ page }) => {
 
   // Transfer first patient to alternate doctor and validate toast
   await visits.transferToAnotherDoctor();
+  await page.pause();
 });

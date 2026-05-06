@@ -19,8 +19,8 @@ import { PageObjectManager } from '../../../PageManager/PageObjectManager';
 
       await test.step("Open Patient Chart and Delete Note", async () => {
         await visits.deletePatientNote();
+      });
 
+      await page.pause();
+    });
   });
-
-
-    });  });

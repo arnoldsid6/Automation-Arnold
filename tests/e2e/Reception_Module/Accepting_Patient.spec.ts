@@ -17,5 +17,5 @@ test('EHR Login Test', async ({ page }) => {
     await reception.patientEllipsis.getByRole('link').click();
     await reception.assignDoctor.first().click();
     await reception.acceptPatientBtn.click();
-    
+    await page.pause();
 });

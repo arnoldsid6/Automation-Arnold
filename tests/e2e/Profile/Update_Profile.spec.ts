@@ -87,5 +87,6 @@ test.describe('Update Profile - Edit Profile', () => {
     await profilePage.primaryDepartment.selectOption(String(MainEditProfile.primaryDepartment));
     await profilePage.saveBtn.click();
     await expect(profilePage.successfulText).toBeVisible();
+    await page.pause();
   });
 });

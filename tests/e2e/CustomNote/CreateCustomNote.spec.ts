@@ -38,4 +38,6 @@ test("Create Custom Note with Checkbox Component", async ({ page }) => {
 
   // Save the custom note
   await customNote.saveNote();
+
+  await page.pause();
 });

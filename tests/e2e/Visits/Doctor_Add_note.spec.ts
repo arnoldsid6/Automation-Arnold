@@ -20,8 +20,7 @@ import { PageObjectManager } from '../../../PageManager/PageObjectManager';
       await test.step("Visit Add Note", async () => {
         await visits.searchAndAddNote();
       });
-      
 
-
+      await page.pause();
     });
   });

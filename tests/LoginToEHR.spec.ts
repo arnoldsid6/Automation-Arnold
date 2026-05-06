@@ -13,4 +13,5 @@ test("Login and Navigate to EHR", async ({ page }) => {
 
   await page.waitForURL(/localhost:8084/, { timeout: 10000 });
   await expect(page).toHaveURL(/localhost:8084/);
+  await page.pause();
 });

@@ -29,6 +29,34 @@ readonly visitDateFilter: Locator;
    readonly doctorSearchInput: Locator;
    readonly transferToastMessage: Locator;
 
+   // View Chart
+   readonly viewChartOption: Locator;
+
+   // Edit Patient Profile
+   readonly editProfileOption: Locator;
+   readonly placeOfBirthInput: Locator;
+   readonly nationalityInput: Locator;
+   readonly bloodTypeSelect: Locator;
+   readonly saveProfileBtn: Locator;
+   readonly profileSavedToast: Locator;
+
+   // Edit Visit
+   readonly editVisitOption: Locator;
+   readonly visitTypeModeSelect: Locator;
+   readonly visitTypeNewSelect: Locator;
+   readonly departmentVisitSelect: Locator;
+   readonly designationInput: Locator;
+   readonly hospitalizationPlanSelect: Locator;
+   readonly membersSelect: Locator;
+   readonly chiefComplaintTextarea: Locator;
+   readonly guardianInput: Locator;
+   readonly impressionTextarea: Locator;
+   readonly remarksTextarea: Locator;
+   readonly investigatorInput: Locator;
+   readonly isCovid19Select: Locator;
+   readonly saveVisitBtn: Locator;
+   readonly visitSavedToast: Locator;
+
    //Update Status
    readonly patientStatusBtn: Locator;
    readonly completedStatusBtn: Locator;
@@ -78,6 +106,34 @@ readonly visitDateFilter: Locator;
     this.transferOption = page.getByText('Transfer to another doctor', { exact: true });
     this.doctorSearchInput = page.locator('[id="Search Doctor-searchDoctor"]');
     this.transferToastMessage = page.locator('#toast-container .toast-message');
+
+    // View Chart
+    this.viewChartOption = page.getByText('View Chart', { exact: true });
+
+    // Edit Visit
+    this.editVisitOption           = page.getByText('Edit Visit', { exact: true });
+    this.visitTypeModeSelect       = page.locator('select[name="visitType"]').first();
+    this.visitTypeNewSelect        = page.locator('select[name="visitType"]').nth(1);
+    this.departmentVisitSelect     = page.locator('select[name="selDepartment"]');
+    this.designationInput          = page.locator('#designation-autoComplete');
+    this.hospitalizationPlanSelect = page.locator('select[name="hosPlan"]');
+    this.membersSelect             = page.locator('select[name="member"]');
+    this.chiefComplaintTextarea    = page.locator('[id="Chief Complaint-chiefComplaint"]');
+    this.guardianInput             = page.locator('[id="Guardian-guardian"]');
+    this.impressionTextarea        = page.locator('[id="Impression-txtimpression"]');
+    this.remarksTextarea           = page.locator('[id="Remarks-txtvisitRemarks"]');
+    this.investigatorInput         = page.locator('input[name="user"][id="investigator"]');
+    this.isCovid19Select           = page.locator('select[name="covid19Type"]');
+    this.saveVisitBtn              = page.locator('#btnSave');
+    this.visitSavedToast           = page.locator('#toast-container .toast-message');
+
+    // Edit Patient Profile
+    this.editProfileOption  = page.getByText('Edit Profile', { exact: true });
+    this.placeOfBirthInput  = page.getByRole('textbox', { name: 'Place of Birth' });
+    this.nationalityInput   = page.getByRole('textbox', { name: 'Nationality' });
+    this.bloodTypeSelect    = page.getByRole('combobox', { name: 'Blood Type' });
+    this.saveProfileBtn     = page.locator('#btnSavePatient');
+    this.profileSavedToast  = page.locator('#toast-container .toast-message');
 
     //From Inprogress to Completed status
     this.patientStatusBtn = page.locator('a.btn.btn-sm.btn-default.dropdown-toggle').first();
@@ -186,5 +242,114 @@ readonly visitDateFilter: Locator;
     await this.updateStatus.click();
     await expect(this.completedStatusValidationMsg).toBeVisible();
     await expect(this.completedStatusValidationMsg).toHaveText('Successfully Updated');
+   }
+
+   async editVisit() {
+     // Open ellipsis for first patient
+     await this.page.locator('.btn.action-mobile.fastclickable').first().dispatchEvent('click');
+     await this.page.waitForTimeout(1500);
+     await this.editVisitOption.dispatchEvent('click');
+     await this.page.waitForTimeout(2000);
+
+     // Visit Type mode (Ambulatory / Stretcher / etc.) — randomly
+     const modeCount = await this.visitTypeModeSelect.locator('option').count();
+     await this.visitTypeModeSelect.selectOption({ index: Math.floor(Math.random() * (modeCount - 1)) + 1 });
+
+     // Visit Type (New / Follow-Up) — randomly
+     const newCount = await this.visitTypeNewSelect.locator('option').count();
+     await this.visitTypeNewSelect.selectOption({ index: Math.floor(Math.random() * (newCount - 1)) + 1 });
+
+     // Department — randomly
+     const deptCount = await this.departmentVisitSelect.locator('option').count();
+     await this.departmentVisitSelect.selectOption({ index: Math.floor(Math.random() * (deptCount - 1)) + 1 });
+
+     // Designation — random text
+     await this.designationInput.fill('QA Automation Designation');
+
+     // Hospitalization Plan — randomly
+     const hospCount = await this.hospitalizationPlanSelect.locator('option').count();
+     await this.hospitalizationPlanSelect.selectOption({ index: Math.floor(Math.random() * (hospCount - 1)) + 1 });
+
+     // Members — randomly
+     const memberCount = await this.membersSelect.locator('option').count();
+     await this.membersSelect.selectOption({ index: Math.floor(Math.random() * (memberCount - 1)) + 1 });
+
+     // Chief Complaint
+     await this.chiefComplaintTextarea.fill('Test Chief Complaint from Automation');
+
+     // Guardian
+     await this.guardianInput.fill('Test Guardian Name');
+
+     // Impression
+     await this.impressionTextarea.fill('Test Impression from Automation');
+
+     // Remarks
+     await this.remarksTextarea.fill('Test Remarks from Automation');
+
+     // Investigator — type "mark" char-by-char to trigger ng-change, then click result
+     await this.investigatorInput.clear();
+     await this.investigatorInput.pressSequentially('mark', { delay: 50 });
+     await this.page.waitForTimeout(2000);
+     await this.page.locator('div.ac-container ul.ac-menu li.ac-menu-item a.fastclickable')
+       .filter({ hasText: /mark/i })
+       .first()
+       .click();
+
+     // Is Covid19 Related — randomly
+     const covidCount = await this.isCovid19Select.locator('option').count();
+     await this.isCovid19Select.selectOption({ index: Math.floor(Math.random() * (covidCount - 1)) + 1 });
+
+     // Save
+     await this.saveVisitBtn.click();
+
+     // Validate toast
+     await expect(this.visitSavedToast).toBeVisible({ timeout: 8000 });
+   }
+
+   async viewChart() {
+     await this.page.locator('.btn.action-mobile.fastclickable').first().dispatchEvent('click');
+     await this.page.waitForTimeout(1500);
+     await this.viewChartOption.dispatchEvent('click');
+     await this.page.waitForTimeout(2000);
+   }
+
+   async editPatientProfile() {
+     // Open ellipsis for first patient
+     await this.page.locator('.btn.action-mobile.fastclickable').first().dispatchEvent('click');
+     await this.page.waitForTimeout(1500);
+
+     // Click Edit Profile
+     await this.editProfileOption.dispatchEvent('click');
+     await this.page.waitForTimeout(2000);
+
+     // Fill Place of Birth
+     await this.placeOfBirthInput.fill('Manila, Philippines');
+
+     // Fill Nationality
+     await this.nationalityInput.fill('Filipino');
+
+     // Select Blood Type randomly
+     const bloodTypes = ['O+', 'O-', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-'];
+     const randomBloodType = bloodTypes[Math.floor(Math.random() * bloodTypes.length)];
+     await this.bloodTypeSelect.selectOption({ label: randomBloodType });
+
+     // Check a random Ethnicity checkbox from the known options
+     const ethnicityOptions = [
+       'American Indian or Alaska Native',
+       'Asian',
+       'Black or African American',
+       'Hispanic / Latino',
+       'White',
+       'Native Hawaiian or Other Pacific Islander',
+     ];
+     const randomEthnicity = ethnicityOptions[Math.floor(Math.random() * ethnicityOptions.length)];
+     await this.page.getByRole('checkbox', { name: randomEthnicity }).check();
+
+     // Click the green check to save
+     await this.saveProfileBtn.dispatchEvent('click');
+
+     // Validate toast
+     await expect(this.profileSavedToast).toBeVisible({ timeout: 8000 });
+     await expect(this.profileSavedToast).toHaveText('Successfully Saved Patient Profile');
    }
 }

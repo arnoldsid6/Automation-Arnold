@@ -168,4 +168,5 @@ test("Upload and Annotate Digital Signature", async ({ page }) => {
     "Annotation message is:",
     await profilePage.uploadSignatureValidation.textContent(),
   );
+  await page.pause();
 });

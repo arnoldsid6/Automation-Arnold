@@ -54,4 +54,5 @@ test("Profile Image Upload Test", async ({ page }) => {
   ]);
 
   console.log(" Upload API Successful!");
+  await page.pause();
 });
